@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "declaration": true,
     "target": "es6",
     "isolatedModules": true,
     "outDir": "./dist"
