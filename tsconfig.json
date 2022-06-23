@@ -6,6 +6,7 @@
     "module": "es6",
     "strict": true,
     "declaration": true,
+    "allowSyntheticDefaultImports": true,
     "isolatedModules": true,
     "noEmit": true
   },
