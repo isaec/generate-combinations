@@ -1,3 +1,5 @@
+import { execPath } from "process";
+
 /**
  * The legal types of a template.
  */
@@ -171,6 +173,8 @@ const makeBaseObject = <T>(
     return baseObject;
   }, {} as Partial<typeof object>);
 
+type generateConstraint = Record<string, Value>;
+
 /**
  * The type of a generation template.
  * This type ensures that value for a given key is a value that is allowed by its type,
@@ -194,7 +198,7 @@ export type generateTemplate<Obj> = {
  * @param log if the details of the generation should be logged to the console for insight
  * @returns an array of objects that are the combinations of the values in the template
  */
-export const generate = <T extends Record<string, Value>>(
+const generate = <T extends generateConstraint>(
   object: generateTemplate<T>,
   log = false
 ): T[] => {
@@ -253,6 +257,27 @@ export const generate = <T extends Record<string, Value>>(
 
   return combos;
 };
+generate.mutable = <T extends generateConstraint>(
+  object: Parameters<typeof generate<T>>[0],
+  log: Parameters<typeof generate<T>>[1]
+) => {
+  const result = generate(object, log);
+  if (typeof structuredClone === "function") {
+    try {
+      return structuredClone(result);
+    } catch (e) {
+      console.error("Error cloning generated data:", e);
+      return result;
+    }
+  }
+  console.error(
+    "Error cloning generated data: structuredClone is not available in this environment.",
+    "Use a deep clone library instead of calling generate.mutable()"
+  );
+  return result;
+};
+
+export { generate };
 
 /*
 generate({

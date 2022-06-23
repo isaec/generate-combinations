@@ -1,6 +1,6 @@
 // Vitest Snapshot v1
 
-exports[`matches snapshots for { a: [Combination], b: [Combination] } 1`] = `
+exports[`generate > matches snapshots for { a: [Combination], b: [Combination] } 1`] = `
 [
   {
     "a": [],
@@ -125,7 +125,7 @@ exports[`matches snapshots for { a: [Combination], b: [Combination] } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { a: [Combination], c: 6 } 1`] = `
+exports[`generate > matches snapshots for { a: [Combination], c: 6 } 1`] = `
 [
   {
     "a": [],
@@ -153,7 +153,7 @@ exports[`matches snapshots for { a: [Combination], c: 6 } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { a: [Combination], l: [Combination], b: 10, c: 6 } 1`] = `
+exports[`generate > matches snapshots for { a: [Combination], l: [Combination], b: 10, c: 6 } 1`] = `
 [
   {
     "a": [],
@@ -216,7 +216,7 @@ exports[`matches snapshots for { a: [Combination], l: [Combination], b: 10, c: 6
 ]
 `;
 
-exports[`matches snapshots for { fnOrUndefined: [Combination], b: 5 } 1`] = `
+exports[`generate > matches snapshots for { fnOrUndefined: [Combination], b: 5 } 1`] = `
 [
   {
     "b": 5,
@@ -233,7 +233,7 @@ exports[`matches snapshots for { fnOrUndefined: [Combination], b: 5 } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { id: 'one', key: [Combination] } 1`] = `
+exports[`generate > matches snapshots for { id: 'one', key: [Combination] } 1`] = `
 [
   {
     "id": "one",
@@ -246,7 +246,7 @@ exports[`matches snapshots for { id: 'one', key: [Combination] } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { id: 'optional', key: [Combination] } 1`] = `
+exports[`generate > matches snapshots for { id: 'optional', key: [Combination] } 1`] = `
 [
   {
     "id": "optional",
@@ -258,7 +258,7 @@ exports[`matches snapshots for { id: 'optional', key: [Combination] } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { id: 'some', key: [Combination] } 1`] = `
+exports[`generate > matches snapshots for { id: 'some', key: [Combination] } 1`] = `
 [
   {
     "id": "some",
@@ -314,7 +314,7 @@ exports[`matches snapshots for { id: 'some', key: [Combination] } 1`] = `
 ]
 `;
 
-exports[`matches snapshots for { one: [Combination], optional: [Combination] } 1`] = `
+exports[`generate > matches snapshots for { one: [Combination], optional: [Combination] } 1`] = `
 [
   {
     "one": 1,
