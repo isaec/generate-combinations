@@ -1,5 +1,5 @@
 /**
- * The legal types of a template. This is intended to exclude `null` and `function` types, because they are used internally.
+ * The legal types of a template.
  */
 export type Value =
   | string
@@ -7,7 +7,23 @@ export type Value =
   | {
       [key: string]: Value;
     }
-  | Value[];
+  | Value[]
+  | null
+  | undefined
+  | Function;
+
+/**
+ * An empty object, that represents the scenario when a key should not be defined
+ */
+class KeyValueUndefined {}
+
+/**
+ * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
+ */
+export const isKeyValueUndefined = <T>(
+  data: KeyValueUndefined | Value
+): data is KeyValueUndefined => data instanceof KeyValueUndefined;
+
 /**
  * The class (and return type) of functions that generate uses to produce combinations.
  * The {@link Combination.values} thunk should return an array of all combinations of the operation when called.
@@ -114,11 +130,8 @@ export const some = <T extends Value>(values: T[]) =>
  *
  * @see {@link generate}
  */
-export const optional = <T>(value: T): Combination<T | undefined> =>
-  new Combination(() => [
-    value,
-    null /* this is a necessary evil to allow optional to apply to undefined unions */ as unknown as undefined,
-  ]);
+export const optional = <T>(value: T): Combination<T | KeyValueUndefined> =>
+  new Combination(() => [value, new KeyValueUndefined()]);
 
 /**
  * Generates the combination of exactly one value for each value passed.
@@ -163,11 +176,17 @@ const makeBaseObject = <T>(
  *
  * In other words, the value is its original typed value `T` or a `Combination<T>`.
  */
-export type generateTemplate<Obj> = {
-  [key in keyof Obj]: Obj[key] extends infer T
-    ? Obj[key] | Combination<T>
-    : Obj[key];
-};
+export type generateTemplate<Obj> =
+  | {
+      [key in keyof Obj]: Obj[key] extends infer T
+        ? Obj[key] | Combination<T>
+        : Obj[key];
+    }
+  | {
+      [key in keyof Obj]?: Obj[key] extends infer T
+        ? Obj[key] | Combination<T | KeyValueUndefined>
+        : never;
+    };
 /**
  * Generates the combination of all Combinations and values in the template.
  *
@@ -196,17 +215,13 @@ export const generate = <T extends Record<string, Value>>(
 
   if (log) {
     console.log("base object:", baseObject);
-    let hasNull = false;
     console.log(
       "combinations to apply:",
       objectCombinations.reduce((obj, [k, values]) => {
         obj[k] = values;
-        if (values.includes(null)) hasNull = true;
         return obj;
       }, {} as Record<string, Array<Value | null>>)
     );
-    if (hasNull)
-      console.log("key will not be defined when combination value is", null);
   }
 
   let combos: T[] = [];
@@ -228,7 +243,8 @@ export const generate = <T extends Record<string, Value>>(
       for (let k = 0; k < (combos.length || 1); k++) {
         const combo: T = Object.assign({}, baseObject, combos[k]);
         // THIS CAST COULD BE INVALID FOR SOME GENERICS, RESULTING IN A RUNTIME ERROR
-        if (value !== null) (combo as Record<keyof T, Value>)[key] = value;
+        if (!isKeyValueUndefined(value))
+          (combo as Record<keyof T, Value>)[key] = value;
         scratch.push(combo);
       }
     }
