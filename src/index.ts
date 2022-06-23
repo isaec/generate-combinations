@@ -6,7 +6,7 @@ export type Value =
     }
   | Value[];
 
-class Combination<T> {
+export class Combination<T> {
   values: () => Array<T>;
   constructor(values: () => ReturnType<Combination<T>["values"]>) {
     this.values = values;
@@ -18,7 +18,7 @@ type CombinationKeyValues<T> = [keyof T & string, Array<Value | null>];
 /**
  * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
  */
-const isCombination = <T>(
+export const isCombination = <T>(
   data: Combination<T> | Value
 ): data is Combination<T> => data instanceof Combination;
 
