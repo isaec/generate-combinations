@@ -37,6 +37,19 @@ it.each([
     one: one([1, 2]),
     optional: optional(5),
   }),
+  // doc comment tests below
+  genTest<{}>({
+    id: "some" /* this is needed because the combinations look the same to the snapshot otherwise */,
+    key: some(["a", "b", "c"]),
+  }),
+  genTest<{}>({
+    id: "one",
+    key: one(["a value", "another value"]),
+  }),
+  genTest<{}>({
+    id: "optional",
+    key: optional("value"),
+  }),
 ])(`matches snapshots for %s`, (_template, generateObject) => {
   expect(generateObject).toMatchSnapshot();
 });

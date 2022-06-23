@@ -1,3 +1,6 @@
+/**
+ * The legal types of a template. This is intended to exclude `null` and `function` types, because they are used internally.
+ */
 export type Value =
   | string
   | number
@@ -5,7 +8,10 @@ export type Value =
       [key: string]: Value;
     }
   | Value[];
-
+/**
+ * The class (and return type) of functions that generate uses to produce combinations.
+ * The {@link Combination.values} thunk should return an array of all combinations of the operation when called.
+ */
 export class Combination<T> {
   values: () => Array<T>;
   constructor(values: () => ReturnType<Combination<T>["values"]>) {
@@ -76,6 +82,9 @@ export const arrayCombinate = <T extends Value>(
  *
  * @param values the values to combine
  * @returns the combination of every value in values, including an empty array
+ *
+ * @see {@link arrayCombinate}
+ * @see {@link generate}
  */
 export const some = <T extends Value>(values: T[]) =>
   new Combination(() => arrayCombinate<T>(values));
@@ -97,6 +106,8 @@ export const some = <T extends Value>(values: T[]) =>
  *
  * @param value the value which is optionally defined on the property
  * @returns the combination of the defined and undefined state of the value
+ *
+ * @see {@link generate}
  */
 export const optional = <T>(value: T): Combination<T | undefined> =>
   new Combination(() => [
@@ -104,6 +115,24 @@ export const optional = <T>(value: T): Combination<T | undefined> =>
     null /* this is a necessary evil to allow optional to apply to undefined unions */ as unknown as undefined,
   ]);
 
+/**
+ * Generates the combination of exactly one value for each value passed.
+ *
+ * ```
+ * generate<{
+ *   key: string;
+ * }>({
+ *   key: one(["a value", "another value"]),
+ * });
+ * ```
+ * will `return`
+ * ```
+ * [{key: "a value"}, {key: "another value"}]
+ * ```
+ *
+ * @param values the values of which one should be assigned to the key
+ * @returns the combination of exactly one value for each value passed
+ */
 export const one = <T>(values: T[]) => new Combination(() => values);
 
 // generate and associated functions below
