@@ -1,12 +1,5 @@
 import { expect, it, describe } from "vitest";
-import {
-  generate,
-  generateTemplate,
-  one,
-  optional,
-  some,
-  Value,
-} from "./generate";
+import { generate, generateTemplate, one, optional, some, Value } from ".";
 
 generate<{
   opt?: number;
