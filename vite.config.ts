@@ -15,6 +15,7 @@ export default defineConfig({
         typescript({
           sourceMap: false,
           declaration: true,
+          exclude: /\.test\.(t|j)s$/m,
           outDir: "dist",
         }),
       ],
