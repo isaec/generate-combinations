@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "build": "tsc && tsc --build tsconfig-commonjs.json"
+    "build": "tsc && tsc --build tsconfig-commonjs.json && cp package-commonjs.json dist/commonjs/package.json"
   },
   "repository": {
     "type": "git",
