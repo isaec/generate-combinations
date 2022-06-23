@@ -15,13 +15,16 @@ class Combination<T> {
 
 type CombinationKeyValues<T> = [keyof T & string, Array<Value | null>];
 
+/**
+ * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
+ */
 const isCombination = <T>(
   data: Combination<T> | Value
 ): data is Combination<T> => data instanceof Combination;
 
 // https://codereview.stackexchange.com/questions/7001/generating-all-combinations-of-an-array
 /**
- * returns an array with every combination of the keys of the passed array - not every ordering is returned
+ * Returns an array with every combination of the keys of the passed array - not every ordering (permutation) is returned.
  *
  * ``arrayCombinate([1, 2, 3])`` returns
  * ```
@@ -29,7 +32,7 @@ const isCombination = <T>(
  * ```
  * Notice how it contains every *combination* of the array, not every permutation.
  *
- * This function powers the {@link some} combinator.
+ * This function powers the {@link some} combination.
  */
 export const arrayCombinate = <T extends Value>(
   array: T[]
@@ -51,7 +54,25 @@ export const arrayCombinate = <T extends Value>(
 };
 
 /**
- * generates the combination of all elements in values
+ * Generates the combination of all elements in values. Sets the key to the combination of the return value of {@link arrayCombinate},
+ * meaning
+ * ```
+ * generate<{
+ *   key: string[];
+ * }>({
+ *   key: some(['a', 'b', 'c']),
+ * });
+ * ```
+ * will `return`
+ * ```
+ * [
+ *  { key: [] },
+ *  { key: ['a'] },
+ *  { key: ['b'] },
+ *  { key: ['a', 'b'] }
+ *  // etc
+ * ]
+ * ```
  *
  * @param values the values to combine
  * @returns the combination of every value in values, including an empty array
@@ -60,7 +81,19 @@ export const some = <T extends Value>(values: T[]) =>
   new Combination(() => arrayCombinate<T>(values));
 
 /**
- * generates the combination of defined and undefined for a value
+ * Generates the combination of defined and undefined for a value.
+ *
+ * ```
+ * generate<{
+ *   key?: string;
+ * }>({
+ *   key: optional("value"),
+ * });
+ * ```
+ * will `return`
+ * ```
+ * [{key: "value"}, {}]
+ * ```
  *
  * @param value the value which is optionally defined on the property
  * @returns the combination of the defined and undefined state of the value
@@ -75,6 +108,9 @@ export const one = <T>(values: T[]) => new Combination(() => values);
 
 // generate and associated functions below
 
+/**
+ * Returns an object that only contains the keys that `shouldRemove(key)` returns false for.
+ */
 const makeBaseObject = <T>(
   shouldRemove: (key: keyof typeof object) => boolean,
   object: Record<string, T>
@@ -86,6 +122,13 @@ const makeBaseObject = <T>(
     return baseObject;
   }, {} as Partial<typeof object>);
 
+/**
+ * The type of a generation template.
+ * This type ensures that value for a given key is a value that is allowed by its type,
+ * or a combination of values that are allowed by their type.
+ *
+ * In other words, the value is its original typed value `T` or a `Combination<T>`.
+ */
 export type generateTemplate<Obj> = {
   [key in keyof Obj]: Obj[key] extends infer T
     ? Obj[key] | Combination<T>
