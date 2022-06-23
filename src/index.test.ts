@@ -37,6 +37,13 @@ it.each([
     one: one([1, 2]),
     optional: optional(5),
   }),
+  genTest<{
+    a: Array<number>;
+    b: Array<number | null>;
+  }>({
+    a: some([1, 2]),
+    b: some([null, 5]),
+  }),
   // doc comment tests below
   genTest<{
     id: string;
