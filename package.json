@@ -4,7 +4,8 @@
   "description": "Generate all combinations of an object from a description, with type safety",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc"
   },
   "repository": {
     "type": "git",
