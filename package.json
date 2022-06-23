@@ -1,6 +1,6 @@
 {
   "name": "generate-combinations",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Generate all combinations of an object from a description, with type safety",
   "scripts": {
     "test": "vitest",
