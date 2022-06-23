@@ -78,6 +78,35 @@ describe("generate", () => {
     expect(generateObject).toMatchSnapshot();
   });
 
+  it("does not clone the data", () => {
+    type Data = {
+      a: {
+        b: number;
+      };
+      array: number[];
+      d: string[];
+    };
+
+    const data = generate<Data>({
+      a: { b: 1 },
+      array: [1, 2, 3],
+      d: some(["a", "b"]),
+    });
+
+    data.forEach((dataInstance, index) => {
+      if (index === 0) {
+        expect(dataInstance.a.b).toBe(1);
+        expect(dataInstance.array.includes(4)).toBe(false);
+      } else {
+        expect(dataInstance.a.b).not.toBe(1);
+        expect(dataInstance.array.includes(4)).toBe(true);
+      }
+
+      dataInstance.a.b++;
+      dataInstance.array.push(4);
+    });
+  });
+
   describe("mutable", () => {
     it("has access to structuredClone that works", () => {
       assert(typeof structuredClone === "function");
@@ -96,19 +125,21 @@ describe("generate", () => {
         a: {
           b: number;
         };
+        array: number[];
         d: string[];
       };
 
-      const data = generate.mutable<any>({
+      const data = generate.mutable<Data>({
         a: { b: 1 },
+        array: [1, 2, 3],
         d: some(["a", "b"]),
       });
 
-      structuredClone(data).forEach((dataInstance) => {
+      data.forEach((dataInstance) => {
         expect(dataInstance.a.b).toBe(1);
-        expect(dataInstance.d.includes("c")).toBe(false);
+        expect(dataInstance.array.includes(4)).toBe(false);
         dataInstance.a.b++;
-        dataInstance.d.push("c");
+        dataInstance.array.push(4);
       });
     });
   });
