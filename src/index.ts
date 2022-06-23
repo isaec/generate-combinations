@@ -35,14 +35,16 @@ export class Combination<T> {
   }
 }
 
-type CombinationKeyValues<T> = [keyof T & string, Array<Value | null>];
+type CombinationKeyValues<T> = [
+  keyof T & string,
+  Array<Value | KeyValueUndefined>
+];
 
 /**
  * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
  */
-export const isCombination = <T>(
-  data: Combination<T> | Value
-): data is Combination<T> => data instanceof Combination;
+export const isCombination = <T>(data: any): data is Combination<T> =>
+  data instanceof Combination;
 
 // https://codereview.stackexchange.com/questions/7001/generating-all-combinations-of-an-array
 /**
@@ -218,7 +220,7 @@ export const generate = <T extends Record<string, Value>>(
       objectCombinations.reduce((obj, [k, values]) => {
         obj[k] = values;
         return obj;
-      }, {} as Record<string, Array<Value | null>>)
+      }, {} as Record<string, Array<Value | KeyValueUndefined>>)
     );
   }
 
