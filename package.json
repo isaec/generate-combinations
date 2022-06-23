@@ -12,6 +12,9 @@
     "prepare": "pnpm build",
     "postversion": "git push && git push --tags"
   },
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
