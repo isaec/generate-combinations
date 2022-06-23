@@ -216,6 +216,23 @@ exports[`matches snapshots for { a: [Combination], l: [Combination], b: 10, c: 6
 ]
 `;
 
+exports[`matches snapshots for { fnOrUndefined: [Combination], b: 5 } 1`] = `
+[
+  {
+    "b": 5,
+    "fnOrUndefined": [Function],
+  },
+  {
+    "b": 5,
+    "fnOrUndefined": [Function],
+  },
+  {
+    "b": 5,
+    "fnOrUndefined": undefined,
+  },
+]
+`;
+
 exports[`matches snapshots for { id: 'one', key: [Combination] } 1`] = `
 [
   {

@@ -44,6 +44,13 @@ it.each([
     a: some([1, 2]),
     b: some([null, 5]),
   }),
+  genTest<{
+    fnOrUndefined: (() => number) | undefined;
+    b: number;
+  }>({
+    fnOrUndefined: one([() => 5, () => 6, undefined]),
+    b: 5,
+  }),
   // doc comment tests below
   genTest<{
     id: string;
