@@ -9,8 +9,7 @@
     "format": "prettier --write '**/*.ts' '**/*.json'",
     "build": "vite build",
     "prepublishOnly": "pnpm typecheck && pnpm test:run && pnpm format",
-    "prepare": "pnpm build",
-    "postversion": "git push && git push --tags"
+    "prepare": "pnpm build"
   },
   "files": [
     "dist"
