@@ -1,0 +1,23 @@
+{
+  "name": "generate-combinations",
+  "version": "0.1.0",
+  "description": "Generate all combinations of an object from a description, with type safety",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaec/generate-combinations.git"
+  },
+  "author": "isaec",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isaec/generate-combinations/issues"
+  },
+  "homepage": "https://github.com/isaec/generate-combinations#readme",
+  "devDependencies": {
+    "jest": "^28.1.1",
+    "typescript": "^4.7.4"
+  }
+}
