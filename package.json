@@ -2,7 +2,6 @@
   "name": "generate-combinations",
   "version": "0.1.0",
   "description": "Generate all combinations of an object from a description, with type safety",
-  "main": "index.js",
   "scripts": {
     "test": "vitest",
     "typecheck": "tsc",
