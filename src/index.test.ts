@@ -1,4 +1,4 @@
-import { expect, it, describe } from "vitest";
+import { expect, it, describe, assert } from "vitest";
 import {
   arrayCombinate,
   generate,
@@ -76,6 +76,41 @@ describe("generate", () => {
     }),
   ])(`matches snapshots for %s`, (_template, generateObject) => {
     expect(generateObject).toMatchSnapshot();
+  });
+
+  describe("mutable", () => {
+    it("has access to structuredClone that works", () => {
+      assert(typeof structuredClone === "function");
+      const obj = { a: { a: 2 } };
+      const objArray = [obj, obj];
+      const copiedObjArray = structuredClone(objArray);
+      expect(copiedObjArray).toEqual(objArray);
+      objArray[0].a.a = 3;
+      expect(objArray[1].a.a).toBe(3);
+      expect(copiedObjArray).not.toEqual(objArray);
+      expect(copiedObjArray[1].a.a).toBe(2);
+    });
+
+    it("deep clones the data", () => {
+      type Data = {
+        a: {
+          b: number;
+        };
+        d: string[];
+      };
+
+      const data = generate.mutable<any>({
+        a: { b: 1 },
+        d: some(["a", "b"]),
+      });
+
+      structuredClone(data).forEach((dataInstance) => {
+        expect(dataInstance.a.b).toBe(1);
+        expect(dataInstance.d.includes("c")).toBe(false);
+        dataInstance.a.b++;
+        dataInstance.d.push("c");
+      });
+    });
   });
 });
 

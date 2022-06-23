@@ -259,12 +259,12 @@ const generate = <T extends generateConstraint>(
 };
 generate.mutable = <T extends generateConstraint>(
   object: Parameters<typeof generate<T>>[0],
-  log: Parameters<typeof generate<T>>[1]
+  log?: Parameters<typeof generate<T>>[1]
 ) => {
   const result = generate(object, log);
   if (typeof structuredClone === "function") {
     try {
-      return structuredClone(result);
+      return result.map((obj) => structuredClone(obj));
     } catch (e) {
       console.error("Error cloning generated data:", e);
       return result;
