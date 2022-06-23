@@ -107,6 +107,11 @@ export const some = <T extends Value>(values: T[]) =>
  * @param value the value which is optionally defined on the property
  * @returns the combination of the defined and undefined state of the value
  *
+ * Note that the type signature for this function is dishonest.
+ * It is typed `undefined` but is actually `null`.
+ * This is to only allow optional to apply to optional values.
+ * If your custom Combination is sometimes the intentional absence of a value, you'll need to do the same.
+ *
  * @see {@link generate}
  */
 export const optional = <T>(value: T): Combination<T | undefined> =>
@@ -163,6 +168,13 @@ export type generateTemplate<Obj> = {
     ? Obj[key] | Combination<T>
     : Obj[key];
 };
+/**
+ * Generates the combination of all Combinations and values in the template.
+ *
+ * @param object the template for the generation, containing {@link Combination}s and values
+ * @param log if the details of the generation should be logged to the console for insight
+ * @returns an array of objects that are the combinations of the values in the template
+ */
 export const generate = <T extends Record<string, Value>>(
   object: generateTemplate<T>,
   log = false

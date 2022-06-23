@@ -38,15 +38,24 @@ it.each([
     optional: optional(5),
   }),
   // doc comment tests below
-  genTest<{}>({
+  genTest<{
+    id: string;
+    key: string[];
+  }>({
     id: "some" /* this is needed because the combinations look the same to the snapshot otherwise */,
     key: some(["a", "b", "c"]),
   }),
-  genTest<{}>({
+  genTest<{
+    id: string;
+    key: string;
+  }>({
     id: "one",
     key: one(["a value", "another value"]),
   }),
-  genTest<{}>({
+  genTest<{
+    id: string;
+    key?: string;
+  }>({
     id: "optional",
     key: optional("value"),
   }),
