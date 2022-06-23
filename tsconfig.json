@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "types": ["node"],
+    "types": ["node", "vite/client"],
+    "moduleResolution": "Node",
     "target": "es6",
     "module": "es6",
     "strict": true,
     "declaration": true,
     "isolatedModules": true,
-    "outDir": "./dist"
-  }
+    "noEmit": true
+  },
+  "exclude": ["node_modules", "vite.config.ts", "dist"]
 }
