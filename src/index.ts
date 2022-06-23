@@ -22,6 +22,14 @@ const isCombination = <T>(
 // https://codereview.stackexchange.com/questions/7001/generating-all-combinations-of-an-array
 /**
  * returns an array with every combination of the keys of the passed array - not every ordering is returned
+ *
+ * ``arrayCombinate([1, 2, 3])`` returns
+ * ```
+ * [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+ * ```
+ * Notice how it contains every *combination* of the array, not every permutation.
+ *
+ * This function powers the {@link some} combinator.
  */
 export const arrayCombinate = <T extends Value>(
   array: T[]

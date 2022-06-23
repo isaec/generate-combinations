@@ -1,17 +1,13 @@
 import { expect, it, describe } from "vitest";
-import { generate, generateTemplate, one, optional, some, Value } from ".";
-
-generate<{
-  opt?: number;
-  required: number;
-  alsoOptional?: number[] | string;
-  numberArray?: Array<1 | 2 | 3> | "test";
-}>({
-  opt: optional(1),
-  required: one([5, 6]),
-  alsoOptional: optional([1]),
-  numberArray: some([1, 2, 3]),
-});
+import {
+  arrayCombinate,
+  generate,
+  generateTemplate,
+  one,
+  optional,
+  some,
+  Value,
+} from ".";
 
 const genTest = <T extends Record<string, Value>>(
   obj: generateTemplate<T>,
@@ -43,6 +39,24 @@ it.each([
   }),
 ])(`matches snapshots for %s`, (_template, generateObject) => {
   expect(generateObject).toMatchSnapshot();
+});
+
+it.each([
+  [
+    /* input */ [1, 2, 3],
+    /* output */ [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]],
+  ],
+  [/* input */ [1], /* output */ [[], [1]]],
+  [
+    /* input */ [],
+    /* output */ [
+      [
+        /* one empty array */
+      ],
+    ],
+  ],
+])(`arrayCombinate(%s) === %s`, (array, expected) => {
+  expect(arrayCombinate(array)).toEqual(expected);
 });
 
 // 1048576 combinations
