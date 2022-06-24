@@ -314,6 +314,53 @@ exports[`generate > matches snapshots for { id: 'some', key: [Combination] } 1`]
 ]
 `;
 
+exports[`generate > matches snapshots for { key: [Combination], nestedGeneration: [Combination] } 1`] = `
+[
+  {
+    "key": "string value",
+    "nestedGeneration": {
+      "key": "val",
+      "otherKey": "otherVal",
+    },
+  },
+  {
+    "nestedGeneration": {
+      "key": "val",
+      "otherKey": "otherVal",
+    },
+  },
+  {
+    "key": "string value",
+    "nestedGeneration": {
+      "otherKey": "otherVal",
+    },
+  },
+  {
+    "nestedGeneration": {
+      "otherKey": "otherVal",
+    },
+  },
+  {
+    "key": "string value",
+    "nestedGeneration": {
+      "key": "val",
+    },
+  },
+  {
+    "nestedGeneration": {
+      "key": "val",
+    },
+  },
+  {
+    "key": "string value",
+    "nestedGeneration": {},
+  },
+  {
+    "nestedGeneration": {},
+  },
+]
+`;
+
 exports[`generate > matches snapshots for { numberButIllegalString: [Combination] } 1`] = `
 [
   {
