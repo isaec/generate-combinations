@@ -24,7 +24,7 @@ import {
   some,
 } from "generate-combinations";
 
-import type { QuoteData } from "./Quote";
+import { QuoteData, Quote } from "./Quote";
 
 // generate all combinations of a quote as described in a declarative api!
 const testCases = generate<QuoteData>({
@@ -33,6 +33,13 @@ const testCases = generate<QuoteData>({
   by: optional("author"),
   from: optional("source")
 })
+
+// vitest + solidjs syntax, but generate would work with any js and test framework
+it.each(testCases)(`rendering %s matches snapshot`, (data) => {
+  const { unmount, container } = render(() => <Quote data={data} />);
+  expect(container).toMatchSnapshot();
+  unmount();
+});
 ```
 
 ## features

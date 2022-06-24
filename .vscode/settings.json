@@ -4,6 +4,7 @@
     "isaec",
     "pnpm",
     "postversion",
+    "solidjs",
     "typecheck",
     "Vitest"
   ]
