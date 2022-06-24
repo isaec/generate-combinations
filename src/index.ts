@@ -43,7 +43,7 @@ export class KeyValueUndefined {}
 /**
  * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
  */
-export const isKeyValueUndefined = <T>(
+export const isKeyValueUndefined = (
   data: KeyValueUndefined | Value
 ): data is KeyValueUndefined => data instanceof KeyValueUndefined;
 
@@ -182,10 +182,8 @@ export const some = <T extends Value>(values: T[]) =>
  * @param value the value which is optionally defined on the property
  * @returns the combination of the defined and undefined state of the value
  *
- * Note that the type signature for this function is dishonest.
- * It is typed `undefined` but is actually `null`.
- * This is to only allow optional to apply to optional values.
- * If your custom Combination is sometimes the intentional absence of a value, you'll need to do the same.
+ * To make a custom Combination that contains an option with the key and value undefined
+ * the same way this function does, use {@link KeyValueUndefined}.
  *
  * @see {@link generate}
  */
