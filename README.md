@@ -36,12 +36,14 @@ const testCases = generate<QuoteData>({
 ## features
 
 Advanced type safety - the `generate` function is typed such that it will not create an object that does not conform to its generic.
+
+If you can make `generate` create data that does not conform to its generic without usage of `illegal` or similar ts assertions - its a bug! Please report it!
+
 ```typescript
 type Data = {
   data: string;
   optionalData?: string;
 }
-
 ```
 
 <details><summary>
@@ -54,7 +56,7 @@ type Data = {
 >     Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'Combination<string>'.
 >       Type 'string | typeof KeyValueUndefined' is not assignable to type 'string'.
 >         Type 'typeof KeyValueUndefined' is not assignable to type 'string'.ts(2322)
-> index.test.ts(22, 3): The expected type comes from property 'data' which is declared here on type 'GenerationTemplate<Data>'
+> README.md: The expected type comes from property 'data' which is declared here on type 'GenerationTemplate<Data>'
 > ```
 
 </p></details>
@@ -159,7 +161,7 @@ And maintains its type safety even when nested.
 >   Type 'Combination<string | number>' is not assignable to type 'Combination<string>'.
 >     Type 'string | number' is not assignable to type 'string'.
 >       Type 'number' is not assignable to type 'string'.ts(2322)
-> index.test.ts(17, 5): The expected type comes from property 'val' which is declared here on type 'GenerationTemplate<{ val: string; otherVal?: number | undefined; }>'
+> README.md: The expected type comes from property 'val' which is declared here on type 'GenerationTemplate<{ val: string; otherVal?: number | undefined; }>'
 > ```
 
 </p></details>
@@ -175,10 +177,10 @@ generate<DataNest>({
 });
 ```
 
-Offers escape hatches from the otherwise safe type system to allow you to create invalid test data.
+While also offering an escape hatch from the otherwise safe type system to allow you to create invalid test data - your input data won't always conform to your types, so why should your test data?
 
 <details><summary>
-Note that using <code>illegal</code> can have unintended implications.
+Note that using <code>illegal</code> can have unexpected implications.
   </summary><p>
 
 > ```typescript
