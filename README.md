@@ -64,14 +64,14 @@ generate<Data>({
   data: optional("hello"),
   // ^ typescript errors because data cannot be undefined
   // optional is the combination of a data and the key data undefined
-  optionalData: "world"
+  optionalData: "world",
 });
 ```
 
 ```typescript
 generate<Data>({
   data: "hello",
-  optionalData: optional("world")
+  optionalData: optional("world"),
   // ^ this is type safe because optionalData is optional
 });
 ```
@@ -81,7 +81,7 @@ Produces all combinations of your description of an object.
 ```typescript
 generate<Data>({
   data: one(["hello", "hey", "hi"]),
-  optionalData: optional("world")
+  optionalData: optional("world"),
 });
 ```
 
@@ -123,6 +123,56 @@ generate<{
   { str: 'WOW!', num: 3 },
   { str: 'wow!', num: 3 }
 ]
+```
+
+Supports nesting of generate calls.
+
+```typescript
+type DataNest = {
+  val: string;
+  nested: {
+    val: string;
+    otherVal?: number;
+  };
+};
+```
+
+```typescript
+generate<NestData>({
+  val: one(["yo", "hey"]),
+  nested: generate.nest<NestData["nested"]>({
+    val: one(["str", "other str"]),
+    otherVal: optional(5),
+  }),
+})
+```
+
+And maintains its type safety even when nested.
+
+<details><summary>
+  Expand to view type error for snippet below.
+  </summary><p>
+
+> ```typescript
+> (property) val: string | Combination<string>
+> Type 'Combination<string | number>' is not assignable to type 'string | Combination<string>'.
+>   Type 'Combination<string | number>' is not assignable to type 'Combination<string>'.
+>     Type 'string | number' is not assignable to type 'string'.
+>       Type 'number' is not assignable to type 'string'.ts(2322)
+> index.test.ts(17, 5): The expected type comes from property 'val' which is declared here on type 'GenerationTemplate<{ val: string; otherVal?: number | undefined; }>'
+> ```
+
+</p></details>
+
+```typescript
+generate<DataNest>({
+  val: one(["yo", "hey"]),
+  nested: generate.nest<DataNest["nested"]>({
+    val: one(["str", 43]),
+    // ^ typescript is angry because val cannot be a number
+    otherVal: optional(5),
+  }),
+});
 ```
 
 Offers escape hatches from the otherwise safe type system to allow you to create invalid test data.
