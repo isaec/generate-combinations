@@ -48,14 +48,14 @@ type Data = {
   Expand to view type error for snippet below.
   </summary><p>
 
-``` typescript
-(property) data: string | Combination<string>
-  Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'string | Combination<string>'.
-    Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'Combination<string>'.
-      Type 'string | typeof KeyValueUndefined' is not assignable to type 'string'.
-        Type 'typeof KeyValueUndefined' is not assignable to type 'string'.ts(2322)
-index.test.ts(22, 3): The expected type comes from property 'data' which is declared here on type 'GenerationTemplate<Data>'
-```
+> ``` typescript
+> (property) data: string | Combination<string>
+>   Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'string | Combination<string>'.
+>     Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'Combination<string>'.
+>       Type 'string | typeof KeyValueUndefined' is not assignable to type 'string'.
+>         Type 'typeof KeyValueUndefined' is not assignable to type 'string'.ts(2322)
+> index.test.ts(22, 3): The expected type comes from property 'data' which is declared here on type 'GenerationTemplate<Data>'
+> ```
 
 </p></details>
 
@@ -131,26 +131,26 @@ Offers escape hatches from the otherwise safe type system to allow you to create
 Note that using <code>illegal</code> can have unintended implications.
   </summary><p>
 
-```typescript
-const illegal = <T, R>(combination: Combination<T>): Combination<R> =>
-  combination as unknown as Combination<R>;
-```
-
-This means `'R' could be instantiated with an arbitrary type which could be unrelated to 'T'.` per `ts(2352)`
-
-```typescript
-generate<{
-  key: string[];
-}>({
-  key: illegal(one([1, 2, 3])),
-  // ^ illegal<number, string[]>(combination: Combination<number>): Combination<string[]>
-  // typescript will not be alarmed about this
-});
-```
-
-In this example, key will be instantiated with one of `[1, 2, 3]` even though `key: string[]`.
-This will almost certainly throw a a runtime error.
-By using `illegal`, you are telling TS not to worry about the type of this key.
+> ```typescript
+> const illegal = <T, R>(combination: Combination<T>): Combination<R> =>
+>   combination as unknown as Combination<R>;
+> ```
+> 
+> This means `'R' could be instantiated with an arbitrary type which could be unrelated to 'T'.` per `ts(2352)`
+> 
+> ```typescript
+> generate<{
+>   key: string[];
+> }>({
+>   key: illegal(one([1, 2, 3])),
+>   // ^ illegal<number, string[]>(combination: Combination<number>): Combination<string[]>
+>   // typescript will not be alarmed about this
+> });
+> ```
+> 
+> In this example, key will be instantiated with one of `[1, 2, 3]` even though `key: string[]`.
+> This will almost certainly throw a a runtime error.
+> By using `illegal`, you are telling TS not to worry about the type of this key.
 
 </p></details>
 
@@ -164,7 +164,7 @@ generate<{
 });
 ```
 
-## note: Beware Combinatorial explosion
+## ⚠️ **Beware Combinatorial explosion**
 
 The following innocuous looking code will produce just over a million (`1_048_576`) combinations. `generate` can spit it out in just a few ms (~230 ms on my machine in deno), but your unit test, test framework, and test runner will likely buckle under the pressure.
 
