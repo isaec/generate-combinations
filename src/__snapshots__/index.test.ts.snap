@@ -388,3 +388,60 @@ exports[`generate > matches snapshots for { one: [Combination], optional: [Combi
   },
 ]
 `;
+
+exports[`generate > matches snapshots for { val: [Combination], nested: [Combination] } 1`] = `
+[
+  {
+    "nested": {
+      "otherVal": 5,
+      "val": "str",
+    },
+    "val": "yo",
+  },
+  {
+    "nested": {
+      "otherVal": 5,
+      "val": "str",
+    },
+    "val": "hey",
+  },
+  {
+    "nested": {
+      "otherVal": 5,
+      "val": "other str",
+    },
+    "val": "yo",
+  },
+  {
+    "nested": {
+      "otherVal": 5,
+      "val": "other str",
+    },
+    "val": "hey",
+  },
+  {
+    "nested": {
+      "val": "str",
+    },
+    "val": "yo",
+  },
+  {
+    "nested": {
+      "val": "str",
+    },
+    "val": "hey",
+  },
+  {
+    "nested": {
+      "val": "other str",
+    },
+    "val": "yo",
+  },
+  {
+    "nested": {
+      "val": "other str",
+    },
+    "val": "hey",
+  },
+]
+`;

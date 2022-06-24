@@ -10,6 +10,14 @@ import {
   Value,
 } from ".";
 
+type Data = {
+  val: string;
+  nested: {
+    val: string;
+    otherVal?: number;
+  };
+};
+
 describe("generate", () => {
   const genTest = <T extends Record<string, Value>>(
     obj: GenerationTemplate<T>,
@@ -17,6 +25,13 @@ describe("generate", () => {
   ) => [obj, generate<T>(obj, log)];
 
   it.each([
+    genTest<Data>({
+      val: one(["yo", "hey"]),
+      nested: generate.nest<Data["nested"]>({
+        val: one(["str", "other str"]),
+        otherVal: optional(5),
+      }),
+    }),
     genTest({
       a: some([1, 2]),
       c: 6,

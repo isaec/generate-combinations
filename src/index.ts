@@ -384,6 +384,38 @@ generate.mutable = <T extends GenerationConstraint>(
   );
   return result;
 };
+/**
+ * This should be preferred to `one(generate({}))`, as it seems to be more type safe.
+ * The type safety of deeply nested generation has not been explored thoroughly.
+ * Note how `nest<Type[key]>` access of a type can easily type its nested generation.
+ * ```
+ * generate<Data>({
+ *   val: one(["yo", "hey"]),
+ *   nested: generate.nest<Data["nested"]>({
+ *     val: one(["str", "other str"]),
+ *     otherVal: optional(5),
+ *   })
+ * })
+ * type Data = {
+ *   val: string;
+ *   nested: {
+ *     val: string;
+ *     otherVal?: number;
+ *   };
+ * };
+ * ```
+ *
+ * {@link generate}, but as a Combination to be set as a value in a generation template.
+ * @param object the template to generate combinations from
+ * @param log if the details of the generation should be logged to the console for insight
+ * @returns the combination of each generation result as a value
+ *
+ * @see {@link generate}
+ */
+generate.nest = <T extends GenerationConstraint>(
+  object: GenerationTemplate<T>,
+  log?: boolean
+) => one(generate(object, log));
 
 export { generate };
 
