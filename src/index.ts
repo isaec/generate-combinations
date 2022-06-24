@@ -1,5 +1,3 @@
-import { execPath } from "process";
-
 /**
  * The legal types of a template.
  */
@@ -61,6 +59,16 @@ export const isKeyValueUndefined = (
 /**
  * The class (and return type) of functions that generate uses to produce combinations.
  * The {@link Combination.values} thunk should return an array of all combinations of the operation when called.
+ *
+ * To make a custom combination, call the constructor and pass in an array of options.
+ * This is what calling values on your combination will return.
+ *
+ * You may need to pass a generic to the `new` constructor.
+ *
+ * ```
+ * const upperAndLowerCase = (string: string): Combination<string> =>
+ *   new Combination([string, string.toUpperCase(), string.toLowerCase()]);
+ * ```
  */
 export class Combination<T> {
   values: () => Array<T>;
