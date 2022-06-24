@@ -3,6 +3,7 @@ import {
   arrayCombinate,
   generate,
   generateTemplate,
+  illegal,
   one,
   optional,
   some,
@@ -44,6 +45,11 @@ describe("generate", () => {
     }>({
       a: some([1, 2]),
       b: some([null, 5]),
+    }),
+    genTest<{
+      numberButIllegalString: number[];
+    }>({
+      numberButIllegalString: illegal(optional("string!")),
     }),
     genTest<{
       fnOrUndefined: (() => number) | undefined;

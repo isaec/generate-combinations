@@ -314,6 +314,15 @@ exports[`generate > matches snapshots for { id: 'some', key: [Combination] } 1`]
 ]
 `;
 
+exports[`generate > matches snapshots for { numberButIllegalString: [Combination] } 1`] = `
+[
+  {
+    "numberButIllegalString": "string!",
+  },
+  {},
+]
+`;
+
 exports[`generate > matches snapshots for { one: [Combination], optional: [Combination] } 1`] = `
 [
   {
