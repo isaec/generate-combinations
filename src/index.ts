@@ -16,7 +16,7 @@ export type Value =
 
 /**
  * An empty object, that represents the scenario when a key should not be defined.
- * {@link generateTemplate} will allow this in positions where a key is optionally defined.
+ * {@link GenerationTemplate} will allow this in positions where a key is optionally defined.
  * This is ***different*** from the union of undefined.
  * ```
  * {
@@ -36,7 +36,7 @@ export type Value =
  * ```
  *
  * @see {@link generate}
- * @see {@link generateTemplate}
+ * @see {@link GenerationTemplate}
  */
 export class KeyValueUndefined {}
 
@@ -226,7 +226,7 @@ const makeBaseObject = <T>(
     return baseObject;
   }, {} as Partial<typeof object>);
 
-type generateConstraint = Record<string, Value>;
+type GenerationConstraint = Record<string, Value>;
 
 /**
  * The type of a generation template.
@@ -235,7 +235,7 @@ type generateConstraint = Record<string, Value>;
  *
  * In other words, the value is its original typed value `T` or a `Combination<T>`.
  */
-export type generateTemplate<Obj> = {
+export type GenerationTemplate<Obj> = {
   [key in keyof Obj]: Partial<Obj>[key] extends Obj[key]
     ? Obj[key] extends infer T
       ? T | Combination<T | KeyValueUndefined>
@@ -295,8 +295,8 @@ export type generateTemplate<Obj> = {
  * @param log if the details of the generation should be logged to the console for insight
  * @returns an array of objects that are the combinations of the values in the template
  */
-const generate = <T extends generateConstraint>(
-  object: generateTemplate<T>,
+const generate = <T extends GenerationConstraint>(
+  object: GenerationTemplate<T>,
   log = false
 ): T[] => {
   const baseObject = makeBaseObject(
@@ -365,7 +365,7 @@ const generate = <T extends generateConstraint>(
  *
  * @see {@link generate}
  */
-generate.mutable = <T extends generateConstraint>(
+generate.mutable = <T extends GenerationConstraint>(
   object: Parameters<typeof generate<T>>[0],
   log?: Parameters<typeof generate<T>>[1]
 ) => {

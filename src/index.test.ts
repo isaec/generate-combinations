@@ -2,7 +2,7 @@ import { expect, it, describe, assert } from "vitest";
 import {
   arrayCombinate,
   generate,
-  generateTemplate,
+  GenerationTemplate,
   illegal,
   one,
   optional,
@@ -12,7 +12,7 @@ import {
 
 describe("generate", () => {
   const genTest = <T extends Record<string, Value>>(
-    obj: generateTemplate<T>,
+    obj: GenerationTemplate<T>,
     log?: boolean
   ) => [obj, generate<T>(obj, log)];
 
