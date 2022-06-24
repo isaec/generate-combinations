@@ -52,15 +52,18 @@ generate<Data>({
   optionalData: "world"
 });
 ```
-<details>
-  <summery>Typescript error</summery>
 
-  ```
-  (property) data: string | Combination<string>
-    Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'string | Combination<string>'.
-      Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'Combination<string>'.
-        Type 'string | typeof KeyValueUndefined' is not assignable to type 'string'.
-          Type 'typeof KeyValueUndefined' is not assignable to type 'string'.ts(2322)
+<details><summary>
+  Expand to view type error
+  </summary><p>
+
+``` typescript
+(property) data: string | Combination<string>
+  Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'string | Combination<string>'.
+    Type 'Combination<string | typeof KeyValueUndefined>' is not assignable to type 'Combination<string>'.
+      Type 'string | typeof KeyValueUndefined' is not assignable to type 'string'.
+        Type 'typeof KeyValueUndefined' is not assignable to type 'string'.ts(2322)
 index.test.ts(22, 3): The expected type comes from property 'data' which is declared here on type 'GenerationTemplate<Data>'
-  ```
-</details>
+```
+
+</p></details>
