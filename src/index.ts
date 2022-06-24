@@ -15,9 +15,30 @@ export type Value =
   | Function;
 
 /**
- * An empty object, that represents the scenario when a key should not be defined
+ * An empty object, that represents the scenario when a key should not be defined.
+ * {@link generateTemplate} will allow this in positions where a key is optionally defined.
+ * This is ***different*** from the union of undefined.
+ * ```
+ * {
+ *   requiredKey: number | undefined, // this key must be defined, but can be defined as undefined
+ *   optionalKey?: number,            // this key may be left undefined
+ * }
+ * ```
+ * If you want a combination including the value undefined, simply use the value undefined.
+ * {@link KeyValueUndefined} is only legal in the `optionalKey?` position, not the `requiredKey` position.
+ * The distinction is small, but it is the difference between:
+ * ```
+ * // the key is instantiated as undefined
+ * const obj1 = { requiredKey: undefined };
+ * // the key is not defined at all
+ * const obj2 = {};
+ *      // ^ this is a type error in TS if the type of obj2 is { requiredKey: number | undefined }
+ * ```
+ *
+ * @see {@link generate}
+ * @see {@link generateTemplate}
  */
-class KeyValueUndefined {}
+export class KeyValueUndefined {}
 
 /**
  * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
@@ -80,8 +101,42 @@ export const arrayCombinate = <T extends Value>(
 };
 
 /**
- * Generates the combination of all elements in values. Sets the key to the combination of the return value of {@link arrayCombinate},
- * meaning
+ * Uses type assertions to allow `Combination<T>` to be used in a position where `T` is not legal.
+ * This can produce runtime errors, but has utility for testing scenarios where your types are wrong at runtime.
+ * This function should be ***used with caution*** - it is an escape hatch from the otherwise sound types of this package.
+ * ```
+ * generate<{
+ *   key: string;
+ * }>({
+ *   key: illegal(optional("value")),
+ * });
+ * ```
+ * Usage of illegal convinces typescript that it is ok for {@link optional} to be in the position of key, even though key is not optional.
+ * Without usage of illegal, typescript will complain that optional cannot be used here, because it might return {@link KeyValueUndefined}.
+ *
+ * However, please keep in mind this means `'R' could be instantiated with an arbitrary type which could be unrelated to 'T'.` per `ts(2352)`
+ * ```
+ * generate<{
+ *   key: string[];
+ * }>({
+ *   key: illegal(one([1, 2, 3])),
+ *         // ^ illegal<number, string[]>(combination: Combination<number>): Combination<string[]>
+ * });
+ * ```
+ * In this example, key will be instantiated with one of `[1, 2, 3]` even though `key: string[]`.
+ * This will almost certainly throw a a runtime error.
+ * By using {@link illegal}, you are telling TS not to worry about the type of this key.
+ *
+ * @param combination a `Combination<T>` to be used in a position where `T` is not legal
+ * @returns a `Combination<R>` that can be used in the position where `T` would be illegal
+ *
+ * @see {@link Combination}
+ */
+export const illegal = <T, R>(combination: Combination<T>): Combination<R> =>
+  combination as unknown as Combination<R>;
+
+/**
+ * Generates the combination of all elements in values. Sets the key to the combination of the return value of {@link arrayCombinate}.
  * ```
  * generate<{
  *   key: string[];
