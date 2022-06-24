@@ -96,7 +96,36 @@ generate<Data>({
 ]
 ```
 
-## note: Beware Combinatorial explosion!
+Easily supports custom combination types.
+
+```typescript
+const upperAndLowerCase = (string: string): Combination<string> =>
+  new Combination(() => [string.toUpperCase(), string.toLowerCase()]);
+
+generate<{
+  str: string;
+  num: number;
+}>({
+  str: upperAndLowerCase("Wow!"),
+  num: one([1, 2, 3]),
+});
+```
+
+```js
+[
+  { str: 'Wow!', num: 1 },
+  { str: 'WOW!', num: 1 },
+  { str: 'wow!', num: 1 },
+  { str: 'Wow!', num: 2 },
+  { str: 'WOW!', num: 2 },
+  { str: 'wow!', num: 2 },
+  { str: 'Wow!', num: 3 },
+  { str: 'WOW!', num: 3 },
+  { str: 'wow!', num: 3 }
+]
+```
+
+## note: Beware Combinatorial explosion
 
 The following innocuous looking code will produce over a million (`1_048_576`) combinations. `generate` can spit it out in just a few ms, but your unit test, test framework, and test runner will likely buckle under the pressure.
 
