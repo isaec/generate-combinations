@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["Combinate", "isaec", "pnpm", "postversion", "typecheck"]
+  "cSpell.words": [
+    "Combinate",
+    "isaec",
+    "pnpm",
+    "postversion",
+    "solidjs",
+    "typecheck",
+    "Vitest"
+  ]
 }
