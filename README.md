@@ -45,7 +45,7 @@ type Data = {
 ```
 
 <details><summary>
-  Expand to view type error for snippet below
+  Expand to view type error for snippet below.
   </summary><p>
 
 ``` typescript
@@ -62,7 +62,7 @@ index.test.ts(22, 3): The expected type comes from property 'data' which is decl
 ```typescript
 generate<Data>({
   data: optional("hello"),
-  // ^ type error is thrown because data cannot be undefined
+  // ^ typescript errors because data cannot be undefined
   // optional is the combination of a data and the key data undefined
   optionalData: "world"
 });
@@ -75,3 +75,52 @@ generate<Data>({
   // ^ this is type safe because optionalData is optional
 });
 ```
+
+Produces all combinations of your description of an object.
+
+```typescript
+generate<Data>({
+  data: one(["hello", "hey", "hi"]),
+  optionalData: optional("world")
+});
+```
+
+```js
+[
+  { data: 'hello', optionalData: 'world' },
+  { data: 'hey', optionalData: 'world' },
+  { data: 'hi', optionalData: 'world' },
+  { data: 'hello' },
+  { data: 'hey' },
+  { data: 'hi' }
+]
+```
+
+## note: Beware Combinatorial explosion!
+
+The following innocuous looking code will produce over a million (`1_048_576`) combinations. `generate` can spit it out in just a few ms, but your unit test, test framework, and test runner will likely buckle under the pressure.
+
+```typescript
+generate<{}>({
+  a: some([1, 2, 3, 4]),
+  b: some([1, 2, 3, 4]),
+  c: some([1, 2, 3, 4]),
+  d: some([1, 2, 3, 4]),
+  e: some([1, 2, 3, 4]),
+})
+```
+
+The reasons for this are twofold
+
+- `some` produces a *lot* of combinations
+
+  ```typescript
+  some([1, 2, 3])
+  // is the combination:
+  [[], [1], [2], [1, 2], [3], [1, 3], [2, 3], [1, 2, 3]]
+  ```
+  
+- generate returns the combination of *every* combination it is supplied
+  - in the explosive example, it needs to return every combination of every some combination
+
+Usually, you will want to use `one` or `optional` instead of `some` to limit the number of combinations - `some` will produce combinations you are not interested in testing.
