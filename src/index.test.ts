@@ -1,6 +1,7 @@
 import { expect, it, describe, assert } from "vitest";
 import {
   arrayCombinate,
+  Combination,
   generate,
   GenerationTemplate,
   illegal,
@@ -112,6 +113,31 @@ describe("generate", () => {
     }),
   ])(`matches snapshots for %s`, (_template, generateObject) => {
     expect(generateObject).toMatchSnapshot();
+  });
+
+  it("supports custom combinations", () => {
+    const upperAndLowerCase = (string: string): Combination<string> =>
+      new Combination([string, string.toUpperCase(), string.toLowerCase()]);
+
+    expect(
+      generate<{
+        str: string;
+        num: number;
+      }>({
+        str: upperAndLowerCase("Wow!"),
+        num: one([1, 2, 3]),
+      })
+    ).toEqual([
+      { str: "Wow!", num: 1 },
+      { str: "WOW!", num: 1 },
+      { str: "wow!", num: 1 },
+      { str: "Wow!", num: 2 },
+      { str: "WOW!", num: 2 },
+      { str: "wow!", num: 2 },
+      { str: "Wow!", num: 3 },
+      { str: "WOW!", num: 3 },
+      { str: "wow!", num: 3 },
+    ]);
   });
 
   it("does not clone the data", () => {

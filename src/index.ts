@@ -64,8 +64,8 @@ export const isKeyValueUndefined = (
  */
 export class Combination<T> {
   values: () => Array<T>;
-  constructor(values: () => ReturnType<Combination<T>["values"]>) {
-    this.values = values;
+  constructor(values: ReturnType<Combination<T>["values"]>) {
+    this.values = () => values;
   }
 }
 
@@ -173,7 +173,7 @@ export const illegal = <T, R>(combination: Combination<T>): Combination<R> =>
  * @see {@link generate}
  */
 export const some = <T extends Value>(values: T[]) =>
-  new Combination(() => arrayCombinate<T>(values));
+  new Combination(arrayCombinate<T>(values));
 
 /**
  * Generates the combination of defined and undefined for a value.
@@ -201,10 +201,7 @@ export const some = <T extends Value>(values: T[]) =>
 export const optional = <T>(
   value: T
 ): Combination<T | typeof KeyValueUndefined> =>
-  new Combination<T | typeof KeyValueUndefined>(() => [
-    value,
-    KeyValueUndefined,
-  ]);
+  new Combination([value, KeyValueUndefined]);
 
 /**
  * Generates the combination of exactly one value for each value passed.
@@ -224,7 +221,7 @@ export const optional = <T>(
  * @param values the values of which one should be assigned to the key
  * @returns the combination of exactly one value for each value passed
  */
-export const one = <T>(values: T[]) => new Combination(() => values);
+export const one = <T>(values: T[]) => new Combination(values);
 
 // generate and associated functions below
 

@@ -100,7 +100,7 @@ Easily supports custom combination types.
 
 ```typescript
 const upperAndLowerCase = (string: string): Combination<string> =>
-  new Combination(() => [string, string.toUpperCase(), string.toLowerCase()]);
+  new Combination([string, string.toUpperCase(), string.toLowerCase()]);
 
 generate<{
   str: string;
