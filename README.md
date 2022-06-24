@@ -35,7 +35,7 @@ const testCases = generate<QuoteData>({
 
 ## features
 
-Advanced type safety - the `generate` is typed such that it will not create an object that does not conform to its generic.
+Advanced type safety - the `generate` function is typed such that it will not create an object that does not conform to its generic.
 ```typescript
 type Data = {
   data: string;
@@ -44,17 +44,8 @@ type Data = {
 
 ```
 
-```typescript
-generate<Data>({
-  data: optional("hello"),
-  // ^ type error is thrown because data cannot be undefined
-  // optional is the combination of a data and the key data undefined
-  optionalData: "world"
-});
-```
-
 <details><summary>
-  Expand to view type error
+  Expand to view type error for snippet below
   </summary><p>
 
 ``` typescript
@@ -67,3 +58,20 @@ index.test.ts(22, 3): The expected type comes from property 'data' which is decl
 ```
 
 </p></details>
+
+```typescript
+generate<Data>({
+  data: optional("hello"),
+  // ^ type error is thrown because data cannot be undefined
+  // optional is the combination of a data and the key data undefined
+  optionalData: "world"
+});
+```
+
+```typescript
+generate<Data>({
+  data: "hello",
+  optionalData: optional("world")
+  // ^ this is type safe because optionalData is optional
+});
+```
