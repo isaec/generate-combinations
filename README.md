@@ -96,7 +96,7 @@ generate<Data>({
 ]
 ```
 
-Easily supports custom combination types.
+While easily supporting advanced custom combination types.
 
 ```typescript
 const upperAndLowerCase = (string: string): Combination<string> =>
@@ -123,6 +123,45 @@ generate<{
   { str: 'WOW!', num: 3 },
   { str: 'wow!', num: 3 }
 ]
+```
+
+Offers escape hatches from the otherwise safe type system to allow you to create invalid test data.
+
+<details><summary>
+Note that using <code>illegal</code> can have unintended implications.
+  </summary><p>
+
+```typescript
+const illegal = <T, R>(combination: Combination<T>): Combination<R> =>
+  combination as unknown as Combination<R>;
+```
+
+This means `'R' could be instantiated with an arbitrary type which could be unrelated to 'T'.` per `ts(2352)`
+
+```typescript
+generate<{
+  key: string[];
+}>({
+  key: illegal(one([1, 2, 3])),
+  // ^ illegal<number, string[]>(combination: Combination<number>): Combination<string[]>
+  // typescript will not be alarmed about this
+});
+```
+
+In this example, key will be instantiated with one of `[1, 2, 3]` even though `key: string[]`.
+This will almost certainly throw a a runtime error.
+By using `illegal`, you are telling TS not to worry about the type of this key.
+
+</p></details>
+
+
+```typescript
+generate<{
+  key: string;
+}>({
+  key: illegal(optional("value"))
+  // ^ illegal<string | typeof KeyValueUndefined, string>(combination: Combination<string | typeof KeyValueUndefined>): Combination<string>
+});
 ```
 
 ## note: Beware Combinatorial explosion
