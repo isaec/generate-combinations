@@ -127,7 +127,7 @@ generate<{
 
 ## note: Beware Combinatorial explosion
 
-The following innocuous looking code will produce over a million (`1_048_576`) combinations. `generate` can spit it out in just a few ms, but your unit test, test framework, and test runner will likely buckle under the pressure.
+The following innocuous looking code will produce just over a million (`1_048_576`) combinations. `generate` can spit it out in just a few ms (~230 ms on my machine in deno), but your unit test, test framework, and test runner will likely buckle under the pressure.
 
 ```typescript
 generate<{}>({
