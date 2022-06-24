@@ -246,6 +246,50 @@ export type generateTemplate<Obj> = {
 };
 /**
  * Generates the combination of all Combinations and values in the template.
+ * Does not clone the data inside the template.
+ * If you need to mutate the returned combinations, use {@link generate.mutable}.
+ *
+ * ```
+ * generate<{
+ *   key: string;
+ *   key2?: number;
+ * }>({
+ *   key: one(["a value", "another value"]),
+ *   key2: optional(1),
+ * })
+ * ```
+ * will produce
+ * ```
+ * [
+ *   { key: "a value", key2: 1 },
+ *   { key: "another value", key2: 1 },
+ *   { key: "a value" },
+ *   { key: "another value" }
+ * ]
+ * ```
+ * Be aware of combinatorial explosion - a few too many combinations can result in a huge amount of data.
+ * While generate can spit this out in a matter of ms, your test runner might struggle with *over a million cases*.
+ *
+ * ```
+ * generate<{}>({
+ *   a: some([1, 2, 3, 4]),
+ *   b: some([1, 2, 3, 4]),
+ *   c: some([1, 2, 3, 4]),
+ *   d: some([1, 2, 3, 4]),
+ *   e: some([1, 2, 3, 4]),
+ * }).length // 1_048_576 combinations
+ * ```
+ *
+ * Passing true to the {@link log} parameter will log debug information to the console.
+ * This can help you debug your combinations.
+ * Below is the debug output for the uppermost example of using generate.
+ * ```
+ * base object: {}
+ * combinations to apply: {
+ * key: [ 'a value', 'another value' ],
+ * key2: [ 1, KeyValueUndefined {} ]
+ * }
+ * ```
  *
  * @param object the template for the generation, containing {@link Combination}s and values
  * @param log if the details of the generation should be logged to the console for insight
@@ -310,6 +354,17 @@ const generate = <T extends generateConstraint>(
 
   return combos;
 };
+
+/**
+ * This function behaves the same as `generate`, but performs a structured clone on the objects;
+ * `generate` does not clone data inside the template object as a performance optimization.
+ * If you intend to mutate the return value of `generate`, use this function instead.
+ *
+ * If you are not mutating the return value of `generate.mutate`, this function is slower -
+ * use `generate` instead.
+ *
+ * @see {@link generate}
+ */
 generate.mutable = <T extends generateConstraint>(
   object: Parameters<typeof generate<T>>[0],
   log?: Parameters<typeof generate<T>>[1]
