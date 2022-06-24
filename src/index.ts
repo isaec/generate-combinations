@@ -16,7 +16,7 @@ export type Value =
 
 /**
  * An empty object, that represents the scenario when a key should not be defined.
- * {@link GenerationTemplate} will allow this in positions where a key is optionally defined.
+ * {@link GenerationTemplate} will allow this (as a type) in positions where a key is optionally defined.
  * This is ***different*** from the union of undefined.
  * ```
  * {
@@ -25,7 +25,7 @@ export type Value =
  * }
  * ```
  * If you want a combination including the value undefined, simply use the value undefined.
- * {@link KeyValueUndefined} is only legal in the `optionalKey?` position, not the `requiredKey` position.
+ * `typeof` {@link KeyValueUndefined} is only legal in the `optionalKey?` position, not the `requiredKey` position.
  * The distinction is small, but it is the difference between:
  * ```
  * // the key is instantiated as undefined
@@ -303,7 +303,7 @@ export type GenerationTemplate<Obj> = {
  * base object: {}
  * combinations to apply: {
  * key: [ 'a value', 'another value' ],
- * key2: [ 1, KeyValueUndefined {} ]
+ * key2: [ 1, [class KeyValueUndefined] ]
  * }
  * ```
  *
