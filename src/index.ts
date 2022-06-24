@@ -41,11 +41,22 @@ export type Value =
 export class KeyValueUndefined {}
 
 /**
- * Checks if `Value | Combination` union type is a `Combination` type using `instanceof`
+ * Checks if `Value | KeyValueUndefined` union type is a `KeyValueUndefined` type
+ * Will use typeof to check for callable, and will call with new in try catch to determine if constructor
+ * `KeyValueUndefined` is a constructable instance of `KeyValueUndefined`
  */
 export const isKeyValueUndefined = (
-  data: KeyValueUndefined | Value
-): data is KeyValueUndefined => data instanceof KeyValueUndefined;
+  data: typeof KeyValueUndefined | Value
+): data is typeof KeyValueUndefined => {
+  if (typeof data !== "function") return false;
+  try {
+    return (
+      new (data as typeof KeyValueUndefined)() instanceof KeyValueUndefined
+    );
+  } catch (e) {
+    return false;
+  }
+};
 
 /**
  * The class (and return type) of functions that generate uses to produce combinations.
@@ -60,7 +71,7 @@ export class Combination<T> {
 
 type CombinationKeyValues<T> = [
   keyof T & string,
-  Array<Value | KeyValueUndefined>
+  Array<Value | typeof KeyValueUndefined>
 ];
 
 /**
@@ -183,12 +194,17 @@ export const some = <T extends Value>(values: T[]) =>
  * @returns the combination of the defined and undefined state of the value
  *
  * To make a custom Combination that contains an option with the key and value undefined
- * the same way this function does, use {@link KeyValueUndefined}.
+ * the same way this function does, use {@link KeyValueUndefined} as a class constructor.
  *
  * @see {@link generate}
  */
-export const optional = <T>(value: T): Combination<T | KeyValueUndefined> =>
-  new Combination(() => [value, new KeyValueUndefined()]);
+export const optional = <T>(
+  value: T
+): Combination<T | typeof KeyValueUndefined> =>
+  new Combination<T | typeof KeyValueUndefined>(() => [
+    value,
+    KeyValueUndefined,
+  ]);
 
 /**
  * Generates the combination of exactly one value for each value passed.
@@ -238,7 +254,7 @@ type GenerationConstraint = Record<string, Value>;
 export type GenerationTemplate<Obj> = {
   [key in keyof Obj]: Partial<Obj>[key] extends Obj[key]
     ? Obj[key] extends infer T
-      ? T | Combination<T | KeyValueUndefined>
+      ? T | Combination<T | typeof KeyValueUndefined>
       : never
     : Obj[key] extends infer T
     ? Obj[key] | Combination<T>
@@ -321,7 +337,7 @@ const generate = <T extends GenerationConstraint>(
       objectCombinations.reduce((obj, [k, values]) => {
         obj[k] = values;
         return obj;
-      }, {} as Record<string, Array<Value | KeyValueUndefined>>)
+      }, {} as Record<string, CombinationKeyValues<T>[1]>)
     );
   }
 
