@@ -2,7 +2,7 @@
 
 Generate all combinations of an object from a description, with advanced type safety. `generate-combinations` supports javascript and typescript, with esm or commonjs style imports. No dependencies,and easy to extend. Ergonomic and declarative API. MIT Licensed.
 
-Ideal for snapshot unit testing. Use `test.each` to generate a test case for each object, and expect it to match its snapshot. With a few lines, you can detect a change to the output of your unit for any valid input data.
+Ideal for snapshot unit testing. Use `test.each` to generate a test case for each object, and expect your output to match a snapshot. With a few lines, you can detect a change to the output of your unit for any valid input data.
 
 ## installation
 
