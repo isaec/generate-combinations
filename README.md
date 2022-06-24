@@ -1,6 +1,8 @@
 # generate-combinations
 
-Generate all combinations of an object from a description, with advanced type safety. `generate-combinations` supports javascript and typescript, with esm or commonjs style imports.
+Generate all combinations of an object from a description, with advanced type safety. `generate-combinations` supports javascript and typescript, with esm or commonjs style imports. No dependencies,and easy to extend. Ergonomic and declarative API. MIT Licensed.
+
+Ideal for snapshot unit testing. Use `test.each` to generate a test case for each object, and expect it to match its snapshot. With a few lines, you can detect a change to the output of your unit for any valid input data.
 
 ## installation
 
@@ -244,3 +246,11 @@ The reasons for this are twofold
   - in the explosive example, it needs to return every combination of every some combination
 
 Usually, you will want to use `one` or `optional` instead of `some` to limit the number of combinations - `some` will produce combinations you are not interested in testing.
+
+## Contributing
+
+Contributions welcome. If a new general purpose `Combination` is needed, please open an issue or pull request. Permutations were intentionally left out of this library to avoid combinatorial explosion - they are so rarely intentional.
+
+If you can break the typing of `generate` please open an issue with code example.
+
+MIT License.
