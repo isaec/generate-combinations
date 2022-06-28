@@ -75,12 +75,10 @@ describe("generate", () => {
       };
     }>({
       key: optional("string value"),
-      nestedGeneration: one(
-        generate({
-          key: optional("val"),
-          otherKey: optional("otherVal"),
-        })
-      ),
+      nestedGeneration: generate.nest<{ key?: string; otherKey?: string }>({
+        key: optional("val"),
+        otherKey: optional("otherVal"),
+      }),
     }),
     genTest<{
       fnOrUndefined: (() => number) | undefined;
