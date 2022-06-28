@@ -83,7 +83,7 @@ describe("generate", () => {
       };
     }>({
       key: optional("string value"),
-      nestedGeneration: generate.nest({
+      nestedGeneration: generate.nest<{ key?: string; otherKey?: string }>({
         key: optional("val"),
         otherKey: optional("otherVal"),
       }),
