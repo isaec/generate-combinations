@@ -67,14 +67,6 @@ describe("generate", () => {
     }>({
       numberButIllegalString: illegal(optional("string!")),
     }),
-    // genTest<
-    //   | {
-    //       funkyValue: "a";
-    //     }
-    //   | { funkyValue: "b" }
-    // >({
-    //   funkyValue: one(["a", "b"]),
-    // }),
     genTest<{
       key?: string;
       nestedGeneration: {
