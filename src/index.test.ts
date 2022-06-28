@@ -67,6 +67,14 @@ describe("generate", () => {
     }>({
       numberButIllegalString: illegal(optional("string!")),
     }),
+    // genTest<
+    //   | {
+    //       funkyValue: "a";
+    //     }
+    //   | { funkyValue: "b" }
+    // >({
+    //   funkyValue: one(["a", "b"]),
+    // }),
     genTest<{
       key?: string;
       nestedGeneration: {
@@ -75,12 +83,10 @@ describe("generate", () => {
       };
     }>({
       key: optional("string value"),
-      nestedGeneration: one(
-        generate({
-          key: optional("val"),
-          otherKey: optional("otherVal"),
-        })
-      ),
+      nestedGeneration: generate.nest({
+        key: optional("val"),
+        otherKey: optional("otherVal"),
+      }),
     }),
     genTest<{
       fnOrUndefined: (() => number) | undefined;

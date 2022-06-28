@@ -258,13 +258,15 @@ type GenerationConstraint = Record<string, Value>;
  * In other words, the value is its original typed value `T` or a `Combination<T>`.
  */
 export type GenerationTemplate<Obj> = {
-  [key in keyof Obj]: Partial<Obj>[key] extends Obj[key]
-    ? Obj[key] extends infer T
-      ? T | Combination<T | typeof KeyValueUndefined>
-      : never
-    : Obj[key] extends infer T
-    ? Obj[key] | Combination<T>
-    : Obj[key];
+  [key in keyof Obj]:
+    | Obj[key]
+    | (Partial<Obj>[key] extends Obj[key]
+        ? Obj[key] extends infer T
+          ? Combination<T | typeof KeyValueUndefined>
+          : never
+        : Obj[key] extends infer T
+        ? Combination<T>
+        : Combination<Obj[key]>);
 };
 /**
  * Generates the combination of all Combinations and values in the template.
