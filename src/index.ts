@@ -4,6 +4,7 @@
 export type Value =
   | string
   | number
+  | boolean
   | {
       [key: string]: Value;
     }
